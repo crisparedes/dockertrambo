@@ -1,4 +1,4 @@
-Proyecto final del módulo de Docker del curso DevToDevOps
+# Proyecto final del módulo de Docker del curso DevToDevOps
 
 Contenedores utilizados
 
@@ -17,4 +17,4 @@ Instrucciones para levantar el ambiente
 
 * Correr el comando "docker-compose up" en la raíz del proyecto, si todo está correcto se podrá vizualizar la web en la dirección http://localhost:3000/
 
-* NOTA: el proceso de creación de los contenedores puede tardar unos minutos la primera vez ya que hay que esperar a que el contenedor de MySQL esté listo para que el contenedor de NodeJS pueda levantar la aplicación web
+    * **NOTA:** el proceso de creación de los contenedores puede tardar unos minutos la primera vez ya que hay que esperar a que el contenedor de MySQL esté listo para que el contenedor de NodeJS pueda levantar la aplicación web
