@@ -1,0 +1,54 @@
+version: '3.6'
+secrets:
+    mysql_root_password:
+        file: ./secrets/mysql_root_password.txt
+    mysql_database:
+        file: ./secrets/mysql_database.txt
+    mysql_user:
+        file: ./secrets/mysql_user.txt
+networks:
+    stack:
+        driver: bridge
+services: 
+    rediscache:
+        image: redis
+        ports:
+            - "6379"
+        networks:
+            - stack
+    mysqldb:
+        image: mysql:5.7.20
+        command: --default-authentication-plugin=mysql_native_password
+        env_file: ./.env
+        expose:
+            - $MYSQL_DOCKER_PORT
+        ports:
+            - $MYSQL_LOCAL_PORT:$MYSQL_DOCKER_PORT
+        secrets:
+            - mysql_database
+            - mysql_user
+            - mysql_root_password
+        networks:
+            - stack
+    web:
+        build:
+            context: .
+        env_file: ./.env
+        command: bash -c 'while !</dev/tcp/mysqldb/3306; do sleep 1; done; node app.js'
+        volumes: 
+            - .:/app/
+            - /app/node_modules
+        depends_on: 
+            - mysqldb
+            - rediscache
+        ports:
+            - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+        secrets:
+            - mysql_database
+            - mysql_user
+            - mysql_root_password
+        environment:
+            MYSQL_HOST: mysqldb
+            REDIS_HOST: rediscache
+        networks: 
+            - stack
